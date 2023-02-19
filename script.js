@@ -72,7 +72,6 @@ function prevSong() {
   if (songIndex < 0) {
     songIndex = songs.length - 1;
   }
-  console.log(songIndex);
   loadSong(songs[songIndex]);
   playSong();
 }
@@ -83,7 +82,6 @@ function nextSong() {
   if (songIndex > songs.length - 1) {
     songIndex = 0;
   }
-  console.log(songIndex);
   loadSong(songs[songIndex]);
   playSong();
 }
@@ -125,6 +123,19 @@ function setProgressBar(e) {
   const clickX = e.offsetX;
   const { duration } = music;
   music.currentTime = (clickX / width) * duration;
+  // Update Progress bar when it's pause and user try to seek
+  if (!isPlaying) {
+    // Update progress bar width
+    const progressPercent = (clickX / width) * 100;
+    progress.style.width = `${progressPercent}%`;
+    // Calculate display for current
+    const currentMinutes = Math.floor(music.currentTime / 60);
+    let currentSeconds = Math.floor(music.currentTime % 60);
+    if (currentSeconds < 10) {
+      currentSeconds = `0${currentSeconds}`;
+    }
+    currentTimeEl.textContent = `${currentMinutes}:${currentSeconds}`;
+  }
 }
 
 // Event Listeners
